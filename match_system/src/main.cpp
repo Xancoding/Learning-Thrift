@@ -66,21 +66,35 @@ public:
         }
     }
 
+    bool check_match(uint32_t i, uint32_t j) {
+        auto a = users[i], b = users[j];
+        
+        int dt = abs(a.scores - b.scores);
+        int a_max_dif = wt[i] * 50;
+        int b_max_dif = wt[j] * 50;
+
+        return dt <= a_max_dif && dt <= b_max_dif;
+    }
+
     void match() {  // 将匹配池中的第一、第二个用户匹配
+       for (uint32_t i = 0; i < wt.size(); ++ i)
+           wt[i] ++;
+
         while (users.size() > 1) {
-            // 按照 rank分 排序
-            sort(users.begin(), users.end(), [&](User& a, User& b) {
-                return a.scores < b.scores;
-            });
             bool flag = true;
-            for (uint32_t i = 1; i < users.size(); ++ i) {
-                auto a = users[i - 1], b = users[i];
-                // 两名玩家分数差小于50时进行匹配
-                if (b.scores - a.scores <= 50) {
-                    users.erase(users.begin() + i - 1, users.begin() + i + 1);
-                    save_result(a.id, b.id);
-                    flag = false;
-                    break;
+            for (uint32_t i = 0; i < users.size(); ++ i) {
+                for (uint32_t j = i + 1; j < users.size(); ++ j) {
+                    if (check_match(i, j)) {
+                        auto a = users[i], b = users[j];
+                        users.erase(users.begin() + j);
+                        users.erase(users.begin() + i);
+                        wt.erase(wt.begin() + j);
+                        wt.erase(wt.begin() + i);
+                        save_result(a.id, b.id);
+                        flag = false;
+                        break;
+                    }
+                    if (!flag) break;       
                 }
             }
             if (flag) break;    // 一轮扫描后，发现没有能够匹配的用户，就停止扫描，等待下次调用
@@ -89,12 +103,14 @@ public:
     
     void add(User user) {   // 向匹配池中加入用户
         users.push_back(user);
+        wt.push_back(0);
     }
 
     void remove(User user) {    // 向匹配池中删除用户
         for (uint32_t i = 0; i < users.size(); ++ i) {
             if (users[i].id == user.id) {
                 users.erase(users.begin() + i);
+                wt.erase(wt.begin() + i);
                 break;
            }
         }
@@ -102,6 +118,7 @@ public:
 
 private:
     vector<User> users; // 匹配池中的用户，用 vector 记录
+    vector<int> wt; // 等待时间，单位：s
 }pool;
 
 class MatchHandler : virtual public MatchIf {
@@ -155,8 +172,6 @@ void consume_task() {
             
             if (task.type == "add") pool.add(task.user);
             else if (task.type == "remove") pool.remove(task.user);
-
-            pool.match();
         } 
     }
 }
