@@ -1,6 +1,7 @@
 ## **Thrift** 
 - [AcWing Linux 基础课 | Thrift](https://www.acwing.com/video/3479/)
 - [Thrift_learning - AcGit](https://git.acwing.com/fashen/thrift_learning/-/blob/master/readme.md)
+- [AcWing Linux 基础课 | Colopen's blog | Thrift](https://www.colopen-blog.com/Engineer/acw_linux/)
 - [thrift 官网](https://thrift.apache.org/) -> [Tutorial](https://thrift.apache.org/tutorial/) -> [tutorial.thrift](https://git-wip-us.apache.org/repos/asf?p=thrift.git;a=blob_plain;f=tutorial/tutorial.thrift)
 
 ### Thrift是什么？
