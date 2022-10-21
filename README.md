@@ -664,6 +664,27 @@ int main(int argc, char **argv) {
   return 0;
 }
 ```
+#### Usage
+```
+# 启动服务端
+./match_system/src/main
 
+# 启动客户端
+python3 game/src/client.py
+
+# 游戏应用端 （op id name scores）
+add 1 yxc 2000
+add 2 xan 1500
+add 3 zagy 2500
+remove 3 zagy 2500
+
+# 匹配系统服务器
+add_user
+add_user
+remove_user 
+# 等待了 10 s
+Match Result: 1 2
+success
+```
 
 
