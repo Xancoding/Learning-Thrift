@@ -665,8 +665,4 @@ int main(int argc, char **argv) {
 ```
 
 
-#### 项目地址
-- [Thrift_lesson](https://git.acwing.com/ZagY/thrift_lesson)
-
-
 
